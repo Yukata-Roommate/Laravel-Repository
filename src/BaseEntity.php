@@ -38,7 +38,7 @@ abstract class BaseEntity implements EntityInterface
     }
 
     /**
-     * bind properties from Model
+     * bind Model properties
      * 
      * @return void
      */

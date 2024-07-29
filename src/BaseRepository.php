@@ -109,18 +109,18 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @see \Illuminate\Database\Eloquent\Builder
  * @see \Illuminate\Database\Query\Builder
  */
-abstract class BaseRepository implements RepositoryInterface
+abstract class BaseRepository
 {
     /*----------------------------------------*
      * Constructor
      *----------------------------------------*/
 
     /**
-     * Eloquent Builder
+     * Builder
      * 
      * @var \Illuminate\Database\Eloquent\Builder
      */
-    protected Builder $query;
+    protected Builder $builder;
 
     /**
      * constructor
@@ -131,13 +131,13 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * reset Eloquent Builder
+     * reset Builder
      * 
      * @return void
      */
     protected function resetQuery(): void
     {
-        $this->query = $this->model()->newQuery();
+        $this->builder = $this->model()->newQuery();
     }
 
     /**
@@ -180,7 +180,7 @@ abstract class BaseRepository implements RepositoryInterface
      *----------------------------------------*/
 
     /**
-     * call query builder method
+     * call Builder method
      * 
      * @param string $name
      * @param array<mixed> $arguments
@@ -188,9 +188,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function __call(string $name, array $arguments): static
     {
-        if (!method_exists($this->query, $name)) throw new \BadMethodCallException("Call to undefined method {$name}");
+        if (!method_exists($this->builder, $name)) throw new \BadMethodCallException("call to undefined method {$name}");
 
-        $this->query = $this->query->$name(...$arguments);
+        $this->builder = $this->builder->$name(...$arguments);
 
         return $this;
     }
@@ -206,7 +206,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $instance = new static();
 
-        if (!method_exists($instance, $name)) throw new \BadMethodCallException("Call to undefined method {$name}");
+        if (!method_exists($instance, $name)) throw new \BadMethodCallException("call to undefined method {$name}");
 
         return $instance->$name(...$arguments);
     }
