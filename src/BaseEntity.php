@@ -28,7 +28,7 @@ abstract class BaseEntity implements EntityInterface
      * @param \YukataRm\Laravel\Repository\Interface\ModelInterface|null $model
      * @return void
      */
-    function __construct(?ModelInterface $model)
+    function __construct(ModelInterface|null $model)
     {
         if (is_null($model)) return;
 
@@ -88,7 +88,7 @@ abstract class BaseEntity implements EntityInterface
      * @param string|null $default
      * @return string|null
      */
-    final protected function stringValue(string $key, ?string $default = null): ?string
+    final protected function stringValue(string $key, string|null $default = null): string|null
     {
         $value = $this->value($key);
 
@@ -103,7 +103,7 @@ abstract class BaseEntity implements EntityInterface
      * @param int|null $default
      * @return int|null
      */
-    final protected function intValue(string $key, ?int $default = null): ?int
+    final protected function intValue(string $key, int|null $default = null): int|null
     {
         $value = $this->value($key);
 
@@ -118,7 +118,7 @@ abstract class BaseEntity implements EntityInterface
      * @param float|null $default
      * @return float|null
      */
-    final protected function floatValue(string $key, ?float $default = null): ?float
+    final protected function floatValue(string $key, float|null $default = null): float|null
     {
         $value = $this->value($key);
 
@@ -133,7 +133,7 @@ abstract class BaseEntity implements EntityInterface
      * @param bool|null $default
      * @return bool|null
      */
-    final protected function boolValue(string $key, ?bool $default = null): ?bool
+    final protected function boolValue(string $key, bool|null $default = null): bool|null
     {
         $value = $this->value($key);
 
@@ -150,7 +150,7 @@ abstract class BaseEntity implements EntityInterface
      * @param array|null $default
      * @return array|null
      */
-    final protected function arrayValue(string $key, ?array $default = null): ?array
+    final protected function arrayValue(string $key, array|null $default = null): array|null
     {
         $value = $this->value($key);
 
@@ -165,7 +165,7 @@ abstract class BaseEntity implements EntityInterface
      * @param \Carbon\Carbon|null $default
      * @return \Carbon\Carbon|null
      */
-    final protected function timestampValue(string $key, ?Carbon $default = null): ?Carbon
+    final protected function timestampValue(string $key, Carbon|null $default = null): Carbon|null
     {
         $value = $this->value($key);
 
@@ -186,7 +186,7 @@ abstract class BaseEntity implements EntityInterface
      * @param \UnitEnum|null $default
      * @return \UnitEnum|null
      */
-    final protected function unitEnumValue(string $key, ?UnitEnum $default = null): ?UnitEnum
+    final protected function unitEnumValue(string $key, UnitEnum|null $default = null): UnitEnum|null
     {
         $value = $this->value($key);
 
