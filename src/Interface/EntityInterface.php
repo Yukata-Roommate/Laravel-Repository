@@ -14,7 +14,7 @@ interface EntityInterface
      *----------------------------------------*/
 
     /**
-     * whether the property is set
+     * whether property is set
      * 
      * @return bool
      */

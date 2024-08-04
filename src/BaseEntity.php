@@ -26,9 +26,8 @@ abstract class BaseEntity implements EntityInterface
      * constructor
      * 
      * @param \YukataRm\Laravel\Repository\Interface\ModelInterface|null $model
-     * @return void
      */
-    function __construct(ModelInterface|null $model)
+    public function __construct(ModelInterface|null $model)
     {
         if (is_null($model)) return;
 
@@ -45,7 +44,7 @@ abstract class BaseEntity implements EntityInterface
     abstract protected function bindProperties(): void;
 
     /**
-     * whether the property is set
+     * whether property is set
      * 
      * @return bool
      */
@@ -59,7 +58,7 @@ abstract class BaseEntity implements EntityInterface
      *----------------------------------------*/
 
     /**
-     * whether the key is set in properties
+     * whether key is set in properties
      * 
      * @param string $key
      * @return bool
@@ -82,7 +81,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as string from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param string|null $default
@@ -97,7 +96,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as int from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param int|null $default
@@ -112,7 +111,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as float from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param float|null $default
@@ -127,7 +126,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as bool from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param bool|null $default
@@ -144,7 +143,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as array from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param array|null $default
@@ -159,7 +158,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as Carbon instance from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param \Carbon\Carbon|null $default
@@ -180,7 +179,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as UnitEnum instance from properties
-     * if the key is not set or the value is null, return default
+     * if key is not set or value is null, return default
      * 
      * @param string $key
      * @param \UnitEnum|null $default
@@ -195,7 +194,7 @@ abstract class BaseEntity implements EntityInterface
 
     /**
      * get value as entityType instance from properties
-     * if the key is not set or the value is not Model, return empty entityType instance
+     * if key is not set or value is not Model, return empty entityType instance
      * 
      * @param string $key
      * @param string $entityType

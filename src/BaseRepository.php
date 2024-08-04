@@ -125,7 +125,7 @@ abstract class BaseRepository
     /**
      * constructor
      */
-    function __construct()
+    public function __construct()
     {
         $this->resetQuery();
     }
