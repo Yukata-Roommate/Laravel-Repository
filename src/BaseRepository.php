@@ -4,6 +4,8 @@ namespace YukataRm\Laravel\Repository;
 
 use YukataRm\Laravel\Repository\Interface\ModelInterface;
 
+use YukataRm\StaticProxy\StaticProxy;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -109,8 +111,22 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @see \Illuminate\Database\Eloquent\Builder
  * @see \Illuminate\Database\Query\Builder
  */
-abstract class BaseRepository
+abstract class BaseRepository extends StaticProxy
 {
+    /*----------------------------------------*
+     * Static Proxy
+     *----------------------------------------*/
+
+    /** 
+     * get class name calling dynamic method
+     * 
+     * @return string 
+     */
+    protected static function getCallableClassName(): string
+    {
+        return static::class;
+    }
+
     /*----------------------------------------*
      * Constructor
      *----------------------------------------*/
@@ -193,21 +209,5 @@ abstract class BaseRepository
         $this->builder = $this->builder->$name(...$arguments);
 
         return $this;
-    }
-
-    /**
-     * call dynamic method statically
-     * 
-     * @param string $name
-     * @param array<mixed> $arguments
-     * @return mixed
-     */
-    public static function __callStatic(string $name, array $arguments): mixed
-    {
-        $instance = new static();
-
-        if (!method_exists($instance, $name)) throw new \BadMethodCallException("call to undefined method {$name}");
-
-        return $instance->$name(...$arguments);
     }
 }
