@@ -4,8 +4,6 @@ namespace YukataRm\Laravel\Repository;
 
 use YukataRm\Laravel\Repository\Interface\ModelInterface;
 
-use YukataRm\StaticProxy\StaticProxy;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -111,22 +109,8 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @see \Illuminate\Database\Eloquent\Builder
  * @see \Illuminate\Database\Query\Builder
  */
-abstract class BaseRepository extends StaticProxy
+abstract class BaseRepository
 {
-    /*----------------------------------------*
-     * Static Proxy
-     *----------------------------------------*/
-
-    /** 
-     * get class name calling dynamic method
-     * 
-     * @return string 
-     */
-    protected static function getCallableClassName(): string
-    {
-        return static::class;
-    }
-
     /*----------------------------------------*
      * Constructor
      *----------------------------------------*/
