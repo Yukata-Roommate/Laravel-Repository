@@ -18,5 +18,5 @@ interface EntityInterface
      * 
      * @return bool
      */
-    public function issetProperty(): bool;
+    public function isEmpty(): bool;
 }

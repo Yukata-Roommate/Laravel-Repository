@@ -25,12 +25,10 @@ abstract class BaseEntity implements EntityInterface
     /**
      * constructor
      * 
-     * @param \YukataRm\Laravel\Repository\Interface\ModelInterface|null $model
+     * @param \YukataRm\Laravel\Repository\Interface\ModelInterface $model
      */
-    public function __construct(ModelInterface|null $model)
+    public function __construct(ModelInterface $model)
     {
-        if (is_null($model)) return;
-
         $this->properties = $model->toArray();
 
         $this->bindProperties();
@@ -48,7 +46,7 @@ abstract class BaseEntity implements EntityInterface
      * 
      * @return bool
      */
-    final public function issetProperty(): bool
+    final public function isEmpty(): bool
     {
         return !empty($this->properties);
     }
@@ -63,147 +61,264 @@ abstract class BaseEntity implements EntityInterface
      * @param string $key
      * @return bool
      */
-    final protected function issetKey(string $key): bool
+    final protected function issetProperty(string $key): bool
     {
-        return array_key_exists($key, $this->properties);
+        return isset($this->properties[$key]);
     }
 
     /**
-     * get value from properties
+     * get data from properties
      * 
      * @param string $key
      * @return mixed
      */
-    final protected function value(string $key): mixed
+    final protected function bind(string $key): mixed
     {
-        return $this->issetKey($key) ? $this->properties[$key] : null;
+        return $this->issetProperty($key) ? $this->properties[$key] : null;
     }
 
     /**
-     * get value as string from properties
-     * if key is not set or value is null, return default
+     * get data as nullable string by key
      * 
      * @param string $key
-     * @param string|null $default
      * @return string|null
      */
-    final protected function stringValue(string $key, string|null $default = null): string|null
+    protected function bindNullableString(string $key): string|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        return is_string($value) ? $value : $default;
+        return is_string($bind) ? strval($bind) : null;
     }
 
     /**
-     * get value as int from properties
-     * if key is not set or value is null, return default
+     * get data as string by key
      * 
      * @param string $key
-     * @param int|null $default
+     * @return string
+     */
+    protected function bindString(string $key): string
+    {
+        $bind = $this->bindNullableString($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable int by key
+     * 
+     * @param string $key
      * @return int|null
      */
-    final protected function intValue(string $key, int|null $default = null): int|null
+    protected function bindNullableInt(string $key): int|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        return is_numeric($value) ? intval($value) : $default;
+        return is_numeric($bind) ? intval($bind) : null;
     }
 
     /**
-     * get value as float from properties
-     * if key is not set or value is null, return default
+     * get data as int by key
      * 
      * @param string $key
-     * @param float|null $default
+     * @return int
+     */
+    protected function bindInt(string $key): int
+    {
+        $bind = $this->bindNullableInt($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable float by key
+     * 
+     * @param string $key
      * @return float|null
      */
-    final protected function floatValue(string $key, float|null $default = null): float|null
+    protected function bindNullableFloat(string $key): float|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        return is_numeric($value) ? floatval($value) : $default;
+        return is_numeric($bind) ? floatval($bind) : null;
     }
 
     /**
-     * get value as bool from properties
-     * if key is not set or value is null, return default
+     * get data as float by key
      * 
      * @param string $key
-     * @param bool|null $default
+     * @return float
+     */
+    protected function bindFloat(string $key): float
+    {
+        $bind = $this->bindNullableFloat($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable bool by key
+     * 
+     * @param string $key
      * @return bool|null
      */
-    final protected function boolValue(string $key, bool|null $default = null): bool|null
+    protected function bindNullableBool(string $key): bool|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        if (intval($value) === 1 || intval($value) === 0) $value = boolval($value);
+        if (intval($bind) === 1 || intval($bind) === 0) $bind = boolval($bind);
 
-        return is_bool($value) ? $value : $default;
+        return is_bool($bind) ? boolval($bind) : null;
     }
 
     /**
-     * get value as array from properties
-     * if key is not set or value is null, return default
+     * get data as bool by key
      * 
      * @param string $key
-     * @param array|null $default
+     * @return bool
+     */
+    protected function bindBool(string $key): bool
+    {
+        $bind = $this->bindNullableBool($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable array by key
+     * 
+     * @param string $key
      * @return array|null
      */
-    final protected function arrayValue(string $key, array|null $default = null): array|null
+    protected function bindNullableArray(string $key): array|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        return is_array($value) ? $value : $default;
+        return is_array($bind) ? $bind : null;
     }
 
     /**
-     * get value as Carbon instance from properties
-     * if key is not set or value is null, return default
+     * get data as array by key
      * 
      * @param string $key
-     * @param \Carbon\Carbon|null $default
+     * @return array
+     */
+    protected function bindArray(string $key): array
+    {
+        $bind = $this->bindNullableArray($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable Carbon by key
+     * 
+     * @param string $key
      * @return \Carbon\Carbon|null
      */
-    final protected function timestampValue(string $key, Carbon|null $default = null): Carbon|null
+    final protected function bindNullableTimestamp(string $key): Carbon|null
     {
-        $value = $this->value($key);
+        $bind = $this->bind($key);
 
-        if (is_null($value)) return $default;
+        if (is_null($bind)) return null;
 
         try {
-            return new Carbon($value);
+            return new Carbon($bind);
         } catch (\Exception $e) {
-            return $default;
+            return null;
         }
     }
 
     /**
-     * get value as UnitEnum instance from properties
-     * if key is not set or value is null, return default
+     * get data as Carbon by key
      * 
      * @param string $key
-     * @param \UnitEnum|null $default
-     * @return \UnitEnum|null
+     * @return \Carbon\Carbon
      */
-    final protected function unitEnumValue(string $key, UnitEnum|null $default = null): UnitEnum|null
+    final protected function bindTimestamp(string $key): Carbon
     {
-        $value = $this->value($key);
+        $bind = $this->bindNullableTimestamp($key);
 
-        return $value instanceof UnitEnum ? $value : $default;
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
     }
 
     /**
-     * get value as entityType instance from properties
-     * if key is not set or value is not Model, return empty entityType instance
+     * get data as nullable UnitEnum by key
+     * 
+     * @param string $key
+     * @return \UnitEnum|null
+     */
+    final protected function bindNullableEnum(string $key): UnitEnum|null
+    {
+        $bind = $this->bind($key);
+
+        return $bind instanceof UnitEnum ? $bind : null;
+    }
+
+    /**
+     * get data as UnitEnum by key
+     * 
+     * @param string $key
+     * @return \UnitEnum
+     */
+    final protected function bindEnum(string $key): UnitEnum
+    {
+        $bind = $this->bindNullableEnum($key);
+
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get data as nullable Entity by key
+     * 
+     * @param string $key
+     * @param string $entityType
+     * @return \YukataRm\Laravel\Repository\Interface\EntityInterface|null
+     */
+    final protected function bindNullableEntity(string $key, string $entityType): EntityInterface|null
+    {
+        $bind = $this->bind($key);
+
+        return $bind instanceof ModelInterface ? new $entityType($bind) : null;
+    }
+
+    /**
+     * get data as Entity by key
      * 
      * @param string $key
      * @param string $entityType
      * @return \YukataRm\Laravel\Repository\Interface\EntityInterface
      */
-    final protected function entityValue(string $key, string $entityType): EntityInterface
+    final protected function bindEntity(string $key, string $entityType): EntityInterface
     {
-        $value = $this->value($key);
+        $bind = $this->bindNullableEntity($key, $entityType);
 
-        return $value instanceof ModelInterface ? new $entityType($value) : new $entityType(null);
+        if (is_null($bind)) throw $this->requiredException($key);
+
+        return $bind;
+    }
+
+    /**
+     * get required exception
+     * 
+     * @param string $key
+     * @return \Throwable
+     */
+    protected function requiredException(string $key): \Throwable
+    {
+        return new \RuntimeException("{$key} is required.");
     }
 }
