@@ -4,8 +4,6 @@ namespace YukataRm\Laravel\Repository\Interface;
 
 use YukataRm\Laravel\Repository\Interface\EntityInterface;
 
-use Illuminate\Database\Eloquent\Builder;
-
 /**
  * Model Interface
  * 
@@ -29,12 +27,12 @@ interface ModelInterface
      * 
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function newQuery(): Builder;
+    public function newQuery();
 
     /**
      * convert properties to array
      * 
      * @return array<string, mixed>
      */
-    public function toArray(): array;
+    public function toArray();
 }
