@@ -184,13 +184,17 @@ abstract class BaseRepository
      * 
      * @param string $name
      * @param array<mixed> $arguments
-     * @return static
+     * @return mixed
      */
-    public function __call(string $name, array $arguments): static
+    public function __call(string $name, array $arguments): mixed
     {
         if (!method_exists($this->builder, $name)) throw new \BadMethodCallException("call to undefined method {$name}");
 
-        $this->builder = $this->builder->$name(...$arguments);
+        $result = $this->builder->$name(...$arguments);
+
+        if (!$result instanceof Builder) return $result;
+
+        $this->builder = $result;
 
         return $this;
     }
