@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * 
  * @package YukataRm\Laravel\Repository
  * 
- * @method \YukataRm\Laravel\Repository\Interface\ModelInterface first(int $id, array $columns = ["*"])
+ * @method \YukataRm\Laravel\Repository\Interface\ModelInterface|null first(int $id, array $columns = ["*"])
  * @method \Illuminate\Database\Eloquent\Collection<\YukataRm\Laravel\Repository\Interface\ModelInterface> get(array $columns = ["*"])
  * 
  * @method \Illuminate\Contracts\Pagination\LengthAwarePaginator paginate(int $perPage = null, array $columns = ["*"], string $pageName = "page", int|null $page = null)

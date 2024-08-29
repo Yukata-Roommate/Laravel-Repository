@@ -16,11 +16,11 @@ use Carbon\Carbon;
 abstract class BaseEntity implements EntityInterface
 {
     /**
-     * Model properties
+     * Model
      * 
-     * @var array<string, mixed>
+     * @var ModelInterface|null
      */
-    protected array $properties = [];
+    private ModelInterface|null $model;
 
     /**
      * constructor
@@ -29,9 +29,11 @@ abstract class BaseEntity implements EntityInterface
      */
     public function __construct(ModelInterface $model)
     {
-        $this->properties = $model->toArray();
+        $this->model = $model;
 
         $this->bindProperties();
+
+        $this->model = null;
     }
 
     /**
@@ -40,16 +42,6 @@ abstract class BaseEntity implements EntityInterface
      * @return void
      */
     abstract protected function bindProperties(): void;
-
-    /**
-     * whether property is set
-     * 
-     * @return bool
-     */
-    final public function isEmpty(): bool
-    {
-        return !empty($this->properties);
-    }
 
     /*----------------------------------------*
      * Bind Properties
@@ -63,7 +55,7 @@ abstract class BaseEntity implements EntityInterface
      */
     final protected function issetProperty(string $key): bool
     {
-        return isset($this->properties[$key]);
+        return property_exists($this->model, $key);
     }
 
     /**
@@ -74,7 +66,7 @@ abstract class BaseEntity implements EntityInterface
      */
     final protected function bind(string $key): mixed
     {
-        return $this->issetProperty($key) ? $this->properties[$key] : null;
+        return $this->issetProperty($key) ? $this->model->{$key} : null;
     }
 
     /**
