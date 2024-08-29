@@ -55,7 +55,7 @@ abstract class BaseEntity implements EntityInterface
      */
     final protected function issetProperty(string $key): bool
     {
-        return property_exists($this->model, $key);
+        return isset($this->model->{$key});
     }
 
     /**
