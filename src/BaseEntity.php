@@ -38,7 +38,7 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
     abstract protected function bind(): void;
 
     /*----------------------------------------*
-     * Property Getter
+     * Property
      *----------------------------------------*/
 
     /**
