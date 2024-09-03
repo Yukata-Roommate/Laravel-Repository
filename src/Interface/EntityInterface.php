@@ -7,6 +7,4 @@ namespace YukataRm\Laravel\Repository\Interface;
  * 
  * @package YukataRm\Laravel\Repository\Interface
  */
-interface EntityInterface
-{
-}
+interface EntityInterface {}
