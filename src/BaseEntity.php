@@ -23,7 +23,7 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
      */
     public function __construct(ModelInterface $model)
     {
-        $this->set($model);
+        $this->setData($model);
 
         $this->bind();
 

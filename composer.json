@@ -3,7 +3,7 @@
     "description": "Repository Layer for Laravel",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "autoload": {
         "psr-4": {
             "YukataRm\\Laravel\\Repository\\": "src"
