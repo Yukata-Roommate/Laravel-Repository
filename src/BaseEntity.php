@@ -42,6 +42,21 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
      *----------------------------------------*/
 
     /**
+     * get property as nullable enum
+     * 
+     * @param string $name
+     * @param string $enumClass
+     * @return \UnitEnum|null
+     */
+    #[\Override]
+    public function nullableEnum(string $name, string $enumClass): \UnitEnum|null
+    {
+        $property = $this->get($name);
+
+        return enum_exists($enumClass) && $property::class === $enumClass ? $property : null;
+    }
+
+    /**
      * get property as nullable Carbon
      * 
      * @param string $name
