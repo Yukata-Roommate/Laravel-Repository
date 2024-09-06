@@ -188,14 +188,16 @@ abstract class BaseRepository
      */
     public function __call(string $name, array $arguments): mixed
     {
-        if (!method_exists($this->builder, $name)) throw new \BadMethodCallException("call to undefined method {$name}");
+        try {
+            $result = $this->builder->$name(...$arguments);
 
-        $result = $this->builder->$name(...$arguments);
+            if (!$result instanceof Builder) return $result;
 
-        if (!$result instanceof Builder) return $result;
+            $this->builder = $result;
 
-        $this->builder = $result;
-
-        return $this;
+            return $this;
+        } catch (\Throwable $e) {
+            throw new \BadMethodCallException($e->getMessage());
+        }
     }
 }
