@@ -7,6 +7,8 @@ use YukataRm\Laravel\Repository\Interface\ModelInterface;
 
 use YukataRm\Entity\ObjectEntity;
 
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Carbon\Carbon;
 
 /**
@@ -91,32 +93,122 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
     }
 
     /**
-     * get property as nullable Entity
+     * get property as nullable Model
      * 
      * @param string $name
-     * @param string $entityType
-     * @return \YukataRm\Laravel\Repository\Interface\EntityInterface|null
+     * @return \YukataRm\Laravel\Repository\Interface\ModelInterface|null
      */
-    public function nullableEntity(string $name, string $entityType): EntityInterface|null
+    public function nullableModel(string $name): ModelInterface|null
     {
         $property = $this->get($name);
 
-        return $property instanceof ModelInterface ? new $entityType($property) : null;
+        return $property instanceof ModelInterface ? $property : null;
+    }
+
+    /**
+     * get property as Model
+     * 
+     * @param string $name
+     * @return \YukataRm\Laravel\Repository\Interface\ModelInterface
+     */
+    public function model(string $name): ModelInterface
+    {
+        $property = $this->nullableModel($name);
+
+        if (is_null($property)) $this->throwRequiredException($name);
+
+        return $property;
+    }
+
+    /**
+     * get property as nullable Model Collection
+     * 
+     * @param string $name
+     * @return \Illuminate\Support\Collection<\YukataRm\Laravel\Repository\Interface\ModelInterface>|null
+     */
+    public function nullableModels(string $name): Collection|null
+    {
+        $property = $this->get($name);
+
+        if (is_array($property)) $property = collect($property);
+
+        if ($property instanceof EloquentCollection) $property = $property->toBase();
+
+        if (!$property instanceof Collection) return null;
+
+        $collection = $property->filter(function (mixed $model) {
+            return $model instanceof ModelInterface;
+        });
+
+        return $collection->isEmpty() ? null : $collection;
+    }
+
+    /**
+     * get property as Model Collection
+     * 
+     * @param string $name
+     * @return \Illuminate\Support\Collection<\YukataRm\Laravel\Repository\Interface\ModelInterface>
+     */
+    public function models(string $name): Collection
+    {
+        $property = $this->nullableModels($name);
+
+        if (is_null($property)) $this->throwRequiredException($name);
+
+        return $property;
+    }
+
+    /**
+     * get property as nullable Entity
+     * 
+     * @param string $name
+     * @return \YukataRm\Laravel\Repository\Interface\EntityInterface|null
+     */
+    public function nullableEntity(string $name): EntityInterface|null
+    {
+        $property = $this->nullableModel($name);
+
+        return is_null($property) ? null : $property->toEntity();
     }
 
     /**
      * get property as Entity
      * 
      * @param string $name
-     * @param string $entityType
      * @return \YukataRm\Laravel\Repository\Interface\EntityInterface
      */
-    public function entity(string $name, string $entityType): EntityInterface
+    public function entity(string $name): EntityInterface
     {
-        $property = $this->nullableEntity($name, $entityType);
+        return $this->model($name)->toEntity();
+    }
 
-        if (is_null($property)) $this->throwRequiredException($name);
+    /**
+     * get property as nullable Entity Collection
+     * 
+     * @param string $name
+     * @return \Illuminate\Support\Collection<\YukataRm\Laravel\Repository\Interface\EntityInterface>|null
+     */
+    public function nullableEntities(string $name): Collection|null
+    {
+        $property = $this->nullableModels($name);
 
-        return $property;
+        if (is_null($property)) return null;
+
+        return $property->map(function (ModelInterface $model) {
+            return $model->toEntity();
+        });
+    }
+
+    /**
+     * get property as Entity Collection
+     * 
+     * @param string $name
+     * @return \Illuminate\Support\Collection<\YukataRm\Laravel\Repository\Interface\EntityInterface>
+     */
+    public function entities(string $name): Collection
+    {
+        return $this->models($name)->map(function (ModelInterface $model) {
+            return $model->toEntity();
+        });
     }
 }
