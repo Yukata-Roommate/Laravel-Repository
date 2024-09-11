@@ -27,10 +27,21 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
     {
         $this->setData($model);
 
+        $this->prepare();
+
         $this->bind();
+
+        $this->passed();
 
         $this->flush();
     }
+
+    /**
+     * prepare bind Model properties
+     * 
+     * @return void
+     */
+    protected function prepare(): void {}
 
     /**
      * bind Model properties
@@ -38,6 +49,13 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
      * @return void
      */
     abstract protected function bind(): void;
+
+    /**
+     * passed bind Model properties
+     * 
+     * @return void
+     */
+    protected function passed(): void {}
 
     /*----------------------------------------*
      * Property
