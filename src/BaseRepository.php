@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
  * @method static select(array $columns = ["*"])
  * @method static addSelect(array|string $column)
  * 
+ * @method static with(array|string $relations, string|\Closure|null $callback = null)
  * @method static join(string $table, string $first, string $operator = null, string $second = null, string $type = "inner", bool $where = false)
  * @method static leftJoin(string $table, string $first, string $operator = null, string $second = null)
  * @method static rightJoin(string $table, string $first, string $operator = null, string $second = null)
@@ -120,7 +121,7 @@ abstract class BaseRepository
      * 
      * @var \Illuminate\Database\Eloquent\Builder
      */
-    protected Builder $builder;
+    private Builder $builder;
 
     /**
      * constructor
