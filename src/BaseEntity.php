@@ -19,6 +19,13 @@ use Carbon\Carbon;
 abstract class BaseEntity extends ObjectEntity implements EntityInterface
 {
     /**
+     * whether data flushed
+     * 
+     * @var bool
+     */
+    protected bool $isFlushed;
+
+    /**
      * constructor
      * 
      * @param \YukataRm\Laravel\Repository\Interface\ModelInterface $model
@@ -33,7 +40,7 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
 
         $this->passed();
 
-        $this->flush();
+        if ($this->isFlushed()) $this->flush();
     }
 
     /**
@@ -56,6 +63,16 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
      * @return void
      */
     protected function passed(): void {}
+
+    /**
+     * whether data flushed
+     * 
+     * @return bool
+     */
+    public function isFlushed(): bool
+    {
+        return isset($this->isFlushed) ? $this->isFlushed : true;
+    }
 
     /*----------------------------------------*
      * Property
