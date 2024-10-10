@@ -88,9 +88,9 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
     #[\Override]
     public function nullableEnum(string $name, string $enumClass): \UnitEnum|null
     {
-        $property = $this->get($name);
+        $property = parent::nullableEnum($name, $enumClass);
 
-        return enum_exists($enumClass) && $property::class === $enumClass ? $property : null;
+        return $property::class === $enumClass ? $property : null;
     }
 
     /**
@@ -104,6 +104,8 @@ abstract class BaseEntity extends ObjectEntity implements EntityInterface
         $property = $this->get($name);
 
         if (is_null($property)) return null;
+
+        if ($property instanceof Carbon) return $property;
 
         try {
             return new Carbon($property);
